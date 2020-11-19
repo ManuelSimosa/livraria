@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const axios = require('axios')
-const {books} = require('../../endpoints')
+const {books} = require('../endpoints')
 
 const booksHandlers = books({axios})
 router.get('/', booksHandlers.get)
