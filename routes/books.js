@@ -1,9 +1,9 @@
 const express = require("express")
 const router = express.Router()
-const axios = require('axios')
+const services = require("../services")
 const {books} = require('../endpoints')
 
-const booksHandlers = books({axios})
+const booksHandlers = books(services)
 router.get('/', booksHandlers.get)
 router.post('/', booksHandlers.post)
 router.put('/:id', booksHandlers.put)
