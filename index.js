@@ -1,11 +1,9 @@
 /* Modules */
 const express = require('express')
-// const axios = require('axios')
 const bodyParser = require('body-parser')
 // const mongoose = require('mongoose')
 
 const db = require("./config/db")
-const {users} = require('./endpoints')
 const {books} = require('./routes')
 
 /* Configurations */
@@ -20,11 +18,13 @@ app.get('/', (req, res)=>{
 })
 app.use('/books', books)
 
-// const userHandlers = users({axios})
-// app.get('/', userHandlers.get)
-// app.post('/', userHandlers.post)
-// app.put('/:id', userHandlers.put)
-// app.delete('/:id', userHandlers.delete)
+
+/* Server */
+app.listen(port, () => { console.log(`Server in http://localhost:${port}`) })
+
+// module.exports = app
+
+
 
 /* const Schema = mongoose.Schema
 
@@ -103,11 +103,3 @@ new newRent ({
 }).catch((erro) => {
     console.log("Houve um erro no aluguel do livro!" + erro)
 }) */
-
-/* Routes */
-// app.use('/books', books)
-
-/* Server */
-app.listen(port, () => { console.log(`Server in http://localhost:${port}`) })
-
-// module.exports = app
