@@ -5,8 +5,9 @@ const {books} = require('../endpoints')
 
 const booksHandlers = books(services)
 router.get('/', booksHandlers.get)
-router.post('/', booksHandlers.post)
-router.put('/:id', booksHandlers.put)
+router.get('/:id', booksHandlers.getOne)
+router.put('/:id', booksHandlers.rent)
+router.post('/', booksHandlers.create)
 router.delete('/:id', booksHandlers.delete)
 
 module.exports = router

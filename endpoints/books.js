@@ -1,30 +1,38 @@
+const mongoose = require('mongoose');
+require("../models/Book")
+const Book = mongoose.model("books");
+
 const handlers = ({ axios }) => ({
-    get: async (req, res) => {
-      const { data } = await axios.get(
-        "https://jsonplaceholder.typicode.com/users"
-      );
-      res.status(200).send(data);
-    },
-    post: async (req, res) => {
-      const { body } = req;
-      const { data } = await axios.post(
-        "https://jsonplaceholder.typicode.com/users",
-        body
-      );
-      res.status(201).send(data);
-    },
-    put: async (req, res) => {
-      const { id } = req.params;
-      const { body } = req;
-      await axios.put(`https://jsonplaceholder.typicode.com/users/${id}`, body);
-      res.sendStatus(204);
-    },
-    delete: async (req, res) => {
-      const { id } = req.params;
-      await axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`);
-      res.sendStatus(204);
-    },
-  });
-  
-  module.exports = handlers;
-  
+  get: (req, res) => {
+    Book.find((err, people) => {
+      if (err) return res.status(500).send(err)
+      return res.status(200).send(people);
+    });
+  },
+  getOne: (req, res) => {
+    Book.findById(req.params.id, (err, data) => {
+      if (err) return res.status(500).send(err)
+      return res.status(200).send(data);
+    })
+  },
+  rent: (req, res) => {
+    Book.findByIdAndUpdate(req.params.id, req.body, { new: true }, (err, data) => {
+      if (err) return res.status(500).send(err);
+      return res.status(200).send(data);
+    })
+  },
+  create: (req, res) => {
+    Book.create(req.body, (err, data) => {
+      if (err) return res.status(500).send(err);
+      return res.status(200).send(data);
+    })
+  },
+  delete: (req, res) => {
+    Book.findByIdAndDelete(req.params.id, (err, data) => {
+      if (err) return res.status(500).send(err);
+      return res.status(200).send(data);
+    })
+  },
+});
+
+module.exports = handlers;
