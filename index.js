@@ -1,12 +1,12 @@
 /* Modules */
 const express = require('express')
-const axios = require('axios')
+// const axios = require('axios')
 const bodyParser = require('body-parser')
-const mongoose = require('mongoose')
+// const mongoose = require('mongoose')
 
 const db = require("./config/db")
 const {users} = require('./endpoints')
-// const books = require("./routes/books")
+const {books} = require('./routes')
 
 /* Configurations */
 const app = express()
@@ -14,14 +14,19 @@ const port = 3000
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-const userHandlers = users({axios})
-app.get('/', userHandlers.get)
-app.post('/', userHandlers.post)
-app.put('/:id', userHandlers.put)
-app.delete('/:id', userHandlers.delete)
+/* Routes */
+app.get('/', (req, res)=>{
+    res.send('Api de Livraria')
+})
+app.use('/books', books)
 
-/*  */
-const Schema = mongoose.Schema
+// const userHandlers = users({axios})
+// app.get('/', userHandlers.get)
+// app.post('/', userHandlers.post)
+// app.put('/:id', userHandlers.put)
+// app.delete('/:id', userHandlers.delete)
+
+/* const Schema = mongoose.Schema
 
 mongoose.Promise = global.Promise;
 mongoose.connect(db.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
@@ -97,10 +102,7 @@ new newRent ({
     console.log('Aluguel com successo!')
 }).catch((erro) => {
     console.log("Houve um erro no aluguel do livro!" + erro)
-})
-/*  */
-
-
+}) */
 
 /* Routes */
 // app.use('/books', books)
