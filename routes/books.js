@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const services = require("../services")
-const {books} = require('../endpoints')
+const {books} = require('../handlers')
 const {authenticate} = require('../middlewares')
 
 const booksHandlers = books(services)
