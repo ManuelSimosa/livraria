@@ -3,7 +3,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const db = require("./config/db")
-const {books, rents} = require('./routes')
+const {books, rents, login} = require('./routes')
 
 /* Configurations */
 const app = express()
@@ -23,6 +23,7 @@ app.get('/', (req, res)=>{
 })
 app.use('/books', books)
 app.use('/rents', rents)
+app.use('/login', login)
 
 /* Server */
 app.listen(port, () => { console.log(`Server in http://localhost:${port}`) })
