@@ -11,7 +11,4 @@ router.put('/:id', authenticate, booksHandlers.update)
 router.get('/:id', authenticate, booksHandlers.getOne)
 router.delete('/:id', authenticate, booksHandlers.delete)
 
-router.put('/rent/:id', authenticate, booksHandlers.bookRent)
-router.put('/return/:id', authenticate, booksHandlers.bookReturn)
-
 module.exports = router
