@@ -4,7 +4,7 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 
 const db = require("./config/db")
-const {books} = require('./routes')
+const {books, rents} = require('./routes')
 
 require("./models/User")
 const User = mongoose.model("users");
@@ -20,6 +20,7 @@ app.get('/', (req, res)=>{
     res.send('Api de Livraria')
 })
 app.use('/books', books)
+app.use('/rents', rents)
 
 mongoose.Promise = global.Promise;
 mongoose.connect(db.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {

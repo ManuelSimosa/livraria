@@ -3,5 +3,6 @@ module.exports = (req,res,next)=>{
     if (userId != 1) {
         return res.sendStatus(403)
     }
+    req.params.userId = 1
     next()
 }
