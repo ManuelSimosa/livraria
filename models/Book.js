@@ -6,7 +6,8 @@ const bookSchema = new Schema({
     author: { type: String, required: true },
     relDate: { type: Number, required: true },
     stock: { type: Number, required: true },
-    genre: {type: String, required: true}
+    genre: {type: String, required: true},
+    quant: { type: Number, required: true }
 })
 
 mongoose.model("books", bookSchema)
