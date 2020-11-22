@@ -2,26 +2,25 @@ const mongoose = require('mongoose');
 require("../models/User")
 const User = mongoose.model("users");
 
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const JWT_PASSWORD = 'manuelsimosa';
+const saltRounds = 15;
+
 const handlers = ({ axios }) => ({
   get: (req, res) => {
-    User.find((err, people) => {
+    User.find(req.body, (err, people) => {
       if (err) return res.status(500).send(err)
       return res.status(200).send(people);
     });
   },
-  create: (req, res) => {
-    User.create(req.body, (err, data) => {
-      if (err) return res.status(500).send(err);
-      return res.status(200).send({id: data._id});
-    })
-  },
   update: (req, res) => {
-    User.findByIdAndUpdate(req.params.id, req.body, (err,user)=>{
+    User.findByIdAndUpdate(req.params.id, req.body, (err, user) => {
       if (err) return res.status(500).send(err)
       return res.sendStatus(200);
     })
   },
-  getOne: (req, res) => {
+  getById: (req, res) => {
     User.findById(req.params.id, (err, data) => {
       if (err) return res.status(500).send(err)
       return res.status(200).send(data);
@@ -33,6 +32,45 @@ const handlers = ({ axios }) => ({
       return res.sendStatus(200);
     })
   },
+  create: (req, res) => {
+    var user = req.body 
+    const token = jwt.sign({ login: user.email }, JWT_PASSWORD, { expiresIn: '3600s' });
+    const hash = bcrypt.hashSync(user.password, saltRounds);
+    user.token = token
+    user.password = hash
+    User.create(user, (err, data) => {
+      if (err) return res.status(500).send(err);
+      return res.status(200).send({data});
+    })
+  },
+  auth: (req, res) => {
+    const login = req.body
+    if (!login) return res.status(401).send({ message: "Usuario o senha inválidos" })
+    User.findOne({ email: login.email }, (err, user) => {
+      console.log('user', user)
+      if (err) return res.status(500).send(err)
+      const comparPassword = bcrypt.compareSync(login.password, user.password);
+      if (!comparPassword) return res.status(401).send({ message: "Erro na validação da senha" })
+      const token = jwt.sign({ login: login.email }, JWT_PASSWORD, { expiresIn: '3600s' });
+      User.findByIdAndUpdate(user._id, { token: token }, (err, editUser) => {
+        if (err) return res.status(500).send(err)
+        jwt.verify(token, JWT_PASSWORD, function (err, decoded) {
+          if (err) return res.status(500).send(err)
+          return res.status(200).send(decoded);
+        });
+      })
+    })
+  },
+  check: (req, res) => {
+    User.findOne({ _id: req.body.id, token: req.body.token }, (err, user) => {
+      if (err) return res.status(501).send(err)
+      jwt.verify(req.body.token, JWT_PASSWORD, function (err, decoded) {
+        if (err) return res.status(500).send(err)
+        return res.status(200).send({ message: "Token válido" })
+      });
+    })
+  }
 });
 
 module.exports = handlers;
+
