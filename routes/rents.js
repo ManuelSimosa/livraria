@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const services = require("../services")
-const {rents} = require('../handlers')
+const {rents} = require('../endpoints')
 const {authenticate} = require('../middlewares')
 
 const rentsHandlers = rents(services)

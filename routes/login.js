@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const services = require("../services")
-const {users} = require('../handlers')
+const {users} = require('../endpoints')
 
 const usersHandlers = users(services)
 router.post('/new', usersHandlers.create)

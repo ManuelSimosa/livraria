@@ -1,13 +1,14 @@
 const express = require("express")
 const router = express.Router()
 const services = require("../services")
-const {users} = require('../handlers')
+const {users} = require('../endpoints')
 const {authenticate} = require('../middlewares')
 
 const usersHandlers = users(services)
-router.get('/', authenticate, usersHandlers.get)
-router.put('/:id', authenticate, usersHandlers.update)
-router.delete('/:id', authenticate, usersHandlers.delete)
-router.get('/:id', authenticate, usersHandlers.getById)
+const authHandlers = authenticate()
+router.get('/', authHandlers.admin, usersHandlers.get)
+router.put('/:id', authHandlers.admin, usersHandlers.update)
+router.delete('/:id', authHandlers.admin, usersHandlers.delete)
+router.get('/:id', authHandlers.admin, usersHandlers.getById)
 
 module.exports = router

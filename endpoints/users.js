@@ -9,7 +9,7 @@ const saltRounds = 15;
 
 const handlers = ({ axios }) => ({
   get: (req, res) => {
-    User.find(req.body, (err, people) => {
+    User.find((err, people) => {
       if (err) return res.status(500).send(err)
       return res.status(200).send(people);
     });
@@ -17,18 +17,21 @@ const handlers = ({ axios }) => ({
   update: (req, res) => {
     User.findByIdAndUpdate(req.params.id, req.body, (err, user) => {
       if (err) return res.status(500).send(err)
+      if (!user) return res.status(500).send({message: 'Usuario inexsistente!'}) 
       return res.sendStatus(200);
     })
   },
   getById: (req, res) => {
-    User.findById(req.params.id, (err, data) => {
+    User.findById(req.params.id, (err, user) => {
       if (err) return res.status(500).send(err)
-      return res.status(200).send(data);
+      if (!user) return res.status(500).send({message: 'Usuario inexsistente!'})
+      return res.status(200).send(user);
     })
   },
   delete: (req, res) => {
-    User.findByIdAndRemove(req.params.id, (err, data) => {
+    User.findByIdAndRemove(req.params.id, (err, user) => {
       if (err) return res.status(500).send(err)
+      if (!user) return res.status(500).send({message: 'Usuario inexsistente!'})
       return res.sendStatus(200);
     })
   },
@@ -47,8 +50,8 @@ const handlers = ({ axios }) => ({
     const login = req.body
     if (!login) return res.status(401).send({ message: "Usuario o senha inválidos" })
     User.findOne({ email: login.email }, (err, user) => {
-      console.log('user', user)
       if (err) return res.status(500).send(err)
+      if (!user) return res.status(500).send({message: 'Usuario inexsistente!'})
       const comparPassword = bcrypt.compareSync(login.password, user.password);
       if (!comparPassword) return res.status(401).send({ message: "Erro na validação da senha" })
       const token = jwt.sign({ login: login.email }, JWT_PASSWORD, { expiresIn: '3600s' });
@@ -64,6 +67,7 @@ const handlers = ({ axios }) => ({
   check: (req, res) => {
     User.findOne({ _id: req.body.id, token: req.body.token }, (err, user) => {
       if (err) return res.status(501).send(err)
+      if (!user) return res.status(500).send({message: 'Usuario inexsistente!'})
       jwt.verify(req.body.token, JWT_PASSWORD, function (err, decoded) {
         if (err) return res.status(500).send(err)
         return res.status(200).send({ message: "Token válido" })
