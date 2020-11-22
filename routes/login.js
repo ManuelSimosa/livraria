@@ -6,6 +6,5 @@ const {users} = require('../endpoints')
 const usersHandlers = users(services)
 router.post('/new', usersHandlers.create)
 router.post('/auth', usersHandlers.auth);
-router.post('/check', usersHandlers.check);
 
 module.exports = router

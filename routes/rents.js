@@ -5,8 +5,9 @@ const {rents} = require('../endpoints')
 const {authenticate} = require('../middlewares')
 
 const rentsHandlers = rents(services)
-router.get('/', authenticate, rentsHandlers.list)
-router.post('/:id', authenticate, rentsHandlers.rent)
-router.put('/return/:id', authenticate, rentsHandlers.return)
+const authHandlers = authenticate()
+router.get('/', authHandlers.admin, rentsHandlers.list)
+router.post('/:id', authHandlers.admin, rentsHandlers.rent)
+router.put('/return/:id', authHandlers.admin, rentsHandlers.return)
 
 module.exports = router

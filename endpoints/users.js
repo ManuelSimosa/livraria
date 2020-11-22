@@ -59,19 +59,10 @@ const handlers = ({ axios }) => ({
         if (err) return res.status(500).send(err)
         jwt.verify(token, JWT_PASSWORD, function (err, decoded) {
           if (err) return res.status(500).send(err)
+          decoded.message = 'validado com successo'
           return res.status(200).send(decoded);
         });
       })
-    })
-  },
-  check: (req, res) => {
-    User.findOne({ _id: req.body.id, token: req.body.token }, (err, user) => {
-      if (err) return res.status(501).send(err)
-      if (!user) return res.status(500).send({message: 'Usuario inexsistente!'})
-      jwt.verify(req.body.token, JWT_PASSWORD, function (err, decoded) {
-        if (err) return res.status(500).send(err)
-        return res.status(200).send({ message: "Token válido" })
-      });
     })
   }
 });
