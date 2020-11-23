@@ -59,8 +59,9 @@ const handlers = ({ axios }) => ({
         if (err) return res.status(500).send(err)
         jwt.verify(token, JWT_PASSWORD, function (err, decoded) {
           if (err) return res.status(500).send(err)
+          editUser.token = token
           decoded.message = 'validado com successo'
-          return res.status(200).send(decoded);
+          return res.status(200).send({user: editUser, decoded: decoded});
         });
       })
     })
