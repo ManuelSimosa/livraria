@@ -2,17 +2,22 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+const morgan = require("morgan")
+
 const db = require("./config/db")
 const {books, rents, login, users} = require('./routes')
 
 /* Configurations */
 const app = express()
-const port = 3000
+const port = 3001
+
+app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 mongoose.Promise = global.Promise;
 mongoose.connect(db.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
-    console.log("DB Conected...")
+    // console.log("DB Conected...")
+    mongoose.connection.db.dropDatabase();
 }).catch(() => {
     console.log("Connection Error...")
 })
@@ -29,3 +34,4 @@ app.use('/users', users)
 /* Server */
 app.listen(port, () => { console.log(`Server in http://localhost:${port}`) })
 
+module.exports = app
