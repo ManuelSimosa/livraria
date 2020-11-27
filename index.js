@@ -17,6 +17,7 @@ app.use(bodyParser.json())
 mongoose.Promise = global.Promise;
 mongoose.connect(db.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
     // console.log("DB Conected...")
+    /* para testes */
     mongoose.connection.db.dropDatabase();
 }).catch(() => {
     console.log("Connection Error...")

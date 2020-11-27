@@ -10,9 +10,9 @@ const saltRounds = 15;
 
 const handlers = ({ axios }) => ({
   get: (req, res) => {
-    User.find((err, books) => {
+    User.find((err, users) => {
       if (err) return res.status(500).send(err)
-      return res.status(200).send({ books });
+      return res.status(200).send({ users });
     });
   },
   update: (req, res) => {
